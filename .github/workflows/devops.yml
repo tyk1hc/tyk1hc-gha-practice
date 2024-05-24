@@ -22,6 +22,22 @@ jobs:
   #tf-unit-tests:
   #  uses: ./.github/workflows/tf-unit-tests.yml
 
+  login-azure-test:
+    name: Login Azure Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+       shell: bash
+
+    steps:
+    # Login to Azure with Service Principal
+    - name: Login to Azure with Service Principal
+      uses: Azure/login@v2
+      with:
+        creds: ${{ secrets.param_azure_credentials }}
+    - run: echo '${{ secrets.param_azure_credentials }}'
+
   deploy-azure-infra-terraform:
     uses: ./.github/workflows/tf-remote-state-ini.yml
     with:
@@ -30,4 +46,4 @@ jobs:
       param_resource_group_name: $ENV_RESOURCE_GROUP_NAME
       param_resource_group_location: $ENV_RESOURCE_GROUP_LOCATION
     secrets:
-      param_azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
