@@ -43,10 +43,12 @@ jobs:
           inlineScript: |
             az version
 
+            echo 'This is resource group name:' ${{ inputs.param_resource_group_name}})
+
             # Create resource group
-            if [ $(az group exists --name $inputs.param_resource_group_name) = false ]; then
-              az group create --name $inputs.param_resource_group_name --location $inputs.param_resource_group_location
-              echo "step-output-rg-result = $inputs.param_resource_group_name Created Successfully!"
+            if [ $(az group exists --name ${{ inputs.param_resource_group_name}}) = false ]; then
+              az group create --name ${{ inputs.param_resource_group_name }} --location ${{ inputs.param_resource_group_location }}
+              echo "step-output-rg-result = ${{ inputs.param_resource_group_name }} Created Successfully!"
             else
-              echo "step-output-rg-result = $inputs.param_resource_group_name already exist!"
+              echo "step-output-rg-result = ${{ inputs.param_resource_group_name }} already exist!"
             fi
