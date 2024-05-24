@@ -25,8 +25,8 @@ jobs:
     name: Create Terraform backend state storage
     uses: ./.github/workflows/azure-cli-create-rg.yml
     with:
-      env: ${{ inputs.param_env }}
-      runner: ${{ inputs.param_runner }}
-      resource_group_name: ${{ inputs.param_resource_group_name }}
-      resource_group_location: ${{ inputs.param_resource_group_location }}
+      param_env: ${{ inputs.param_env }}
+      param_runner: ${{ inputs.param_runner }}
+      param_resource_group_name: ${{ inputs.param_resource_group_name }}
+      param_resource_group_location: ${{ inputs.param_resource_group_location }}
 
