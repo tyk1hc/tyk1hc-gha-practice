@@ -22,7 +22,7 @@ on:
 jobs:
   deploy-azure-infra-terraform:
     name: Deploy to Azure with Terraform
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.param_runner }}
     environment: ${{ inputs.param_env }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -43,7 +43,7 @@ jobs:
 
     # Create Terraform Backend State Storage
     - name: Create Terraform backend state storage
-      uses: ./scripts/azure-resource-group/azure-cli-resource-group.yml
+      uses: ./.github/workflows/azure-cli-create-rg.yml
       with:
         env: ${{ inputs.param_env }}
         runner: ${{ inputs.param_runner }}

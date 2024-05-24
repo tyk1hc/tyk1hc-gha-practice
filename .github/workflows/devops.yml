@@ -30,4 +30,4 @@ jobs:
       param_resource_group_name: $ENV_RESOURCE_GROUP_NAME
       param_resource_group_location: $ENV_RESOURCE_GROUP_LOCATION
     secrets:
-      param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
+      param_azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
