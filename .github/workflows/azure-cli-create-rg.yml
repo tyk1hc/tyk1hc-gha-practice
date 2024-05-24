@@ -43,7 +43,7 @@ jobs:
           inlineScript: |
             az version
 
-            echo "This is resource group name:"" ${{ inputs.param_resource_group_name}})
+            echo "This is resource group name:"
 
             # Create resource group
             if [ $(az group exists --name ${{ inputs.param_resource_group_name}}) = false ]; then
