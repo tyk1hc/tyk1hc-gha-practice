@@ -35,8 +35,8 @@ jobs:
     - name: Login to Azure with Service Principal
       uses: Azure/login@v2
       with:
-        creds: ${{ secrets.param_azure_credentials }}
-    - run: echo '${{ secrets.param_azure_credentials }}'
+        creds: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
+    - run: echo '${{ secrets.AZURE_LEARNING_CREDENTIALS }}'
 
   deploy-azure-infra-terraform:
     uses: ./.github/workflows/tf-remote-state-ini.yml
