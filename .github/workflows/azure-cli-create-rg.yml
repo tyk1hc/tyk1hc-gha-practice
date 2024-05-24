@@ -28,7 +28,9 @@ jobs:
   create-azure-resource-group:
     name: Create Azure Resource Group
     runs-on: ${{ inputs.param_runner }}
-    environment: ${{ inputs.param_env }}
+    #environment: ${{ inputs.param_env }}
+    env:
+      JOB_TEST_VARIABLE: JOB
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -46,6 +48,8 @@ jobs:
         with:
           inlineScript: |
             az version
+
+            echo $JOB_TEST_VARIABLE
 
             # Create resource group
             if [ $(az group exists --name $RESOURCE_GROUP_NAME) = false ]; then
