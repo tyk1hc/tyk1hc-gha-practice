@@ -3,16 +3,16 @@ name: "Create Resource Group"
 on:
   workflow_call:
     inputs:
-      env:
+      param_env:
         required: true
         type: string
-      runner:
+      param_runner:
         required: true
         type: string
-      resource_group_name:
+      param_resource_group_name:
         required: true
         type: string
-      resource_group_location:
+      param_resource_group_location:
         required: true
         type: string
     outputs:
@@ -23,8 +23,8 @@ on:
 jobs:
   create-azure-resource-group:
     name: Create Azure Resource Group
-    runs-on: ${{ inputs.runner }}
-    environment: ${{ inputs.env }}
+    runs-on: ${{ inputs.param_runner }}
+    environment: ${{ inputs.param_env }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -44,9 +44,9 @@ jobs:
             az version
 
             # Create resource group
-            if [ $(az group exists --name ${{ inputs.resource_group_name }}) = false ]; then
-              az group create --name ${{ inputs.resource_group_name }} --location ${{ inputs.resource_group_location }}
-              echo "step-output-rg-result=${{ inputs.resource_group_name }} Created Successfully!"
+            if [ $(az group exists --name $inputs.param_resource_group_name) = false ]; then
+              az group create --name $inputs.param_resource_group_name --location $inputs.param_resource_group_location
+              echo "step-output-rg-result = $inputs.param_resource_group_name Created Successfully!"
             else
-              echo "step-output-rg-result=${{ inputs.resource_group_name }} already exist!"
+              echo "step-output-rg-result = $inputs.param_resource_group_name already exist!"
             fi
