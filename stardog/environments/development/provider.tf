@@ -1,0 +1,1 @@
+# Specifies the cloud or SaaS providers utilized. 

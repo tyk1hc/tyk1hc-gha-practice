@@ -1,0 +1,52 @@
+name: "Terraform Initial"
+
+on:
+  workflow_call:
+    inputs:
+      param_env:
+        required: true
+        type: string
+      param_runner:
+        required: true
+        type: string
+      param_resource_group_name:
+        required: true
+        type: string
+      param_resource_group_location:
+        required: true
+        type: string
+    secrets:
+      param_azure_credentials:
+        required: true
+
+jobs:
+  deploy-azure-infra-terraform:
+    name: Deploy to Azure with Terraform
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.param_env }}
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+       shell: bash
+
+    steps:
+    # Checkout the repository to the Github Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Login to Azure with Service Principal
+    - name: Login to Azure with Service Principal
+      uses: Azure/login@v2
+      with:
+        creds: ${{ secrets.param_azure_credentials }}
+
+    # Create Terraform Backend State Storage
+    - name: Create Terraform backend state storage
+      uses: ./scripts/azure-resource-group/azure-cli-resource-group.yml
+      with:
+        env: ${{ inputs.param_env }}
+        runner: ${{ inputs.param_runner }}
+        resource_group_name: ${{ inputs.param_resource_group_name }}
+        resource_group_location: ${{ inputs.param_resource_group_location }}
+

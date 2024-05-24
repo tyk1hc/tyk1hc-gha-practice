@@ -1,0 +1,33 @@
+name: 'Create Infra with Terraform'
+
+on:
+ push:
+   branches: [main]
+   paths: ./.github/workflows/tf-devops.yml
+ workflow_dispatch:
+
+env:
+  ENV_STORAGE_ACCOUNT_NAME: storagetfstatelearning
+  ENV_STORAGE_ACCOUNT_LOCATION: southeastasia
+
+  ENV_RESOURCE_GROUP_NAME: rg-tf-state-learning
+  ENV_RESOURCE_GROUP_LOCATION: southeastasia
+
+  ENV_CONTAINER_NAME: tfstatelearning
+  ENV_BLOB_NAME: tflearning.tfstate
+
+jobs:
+
+  # Run unit test to check terraform environment
+  #tf-unit-tests:
+  #  uses: ./.github/workflows/tf-unit-tests.yml
+
+  deploy-azure-infra-terraform:
+    uses: ./.github/workflows/tf-remote-state-ini.yml
+    with:
+      param_env: development
+      param_runner: ubuntu-latest
+      param_resource_group_name: $ENV_RESOURCE_GROUP_NAME
+      param_resource_group_location: $ENV_RESOURCE_GROUP_LOCATION
+    secrets:
+      param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
