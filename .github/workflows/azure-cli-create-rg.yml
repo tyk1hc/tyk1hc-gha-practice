@@ -35,6 +35,10 @@ jobs:
       create-rg-result-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-rg-result }}
 
     steps:
+      # Checkout the repository to the Github Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Create Azure Resource Group
         id: step-id-create-azure-rg
         uses: azure/cli@v2
