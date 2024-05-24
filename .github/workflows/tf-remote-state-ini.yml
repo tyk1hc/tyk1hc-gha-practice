@@ -29,4 +29,6 @@ jobs:
       param_runner: ${{ inputs.param_runner }}
       param_resource_group_name: ${{ inputs.param_resource_group_name }}
       param_resource_group_location: ${{ inputs.param_resource_group_location }}
+    secrets:
+      param_azure_credentials: ${{ secrets.param_azure_credentials }}
 
