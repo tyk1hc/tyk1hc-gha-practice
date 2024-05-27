@@ -22,6 +22,7 @@ jobs:
   #tf-unit-tests:
   #  uses: ./.github/workflows/tf-unit-tests.yml
 
+  # Initial Variables
   devops-initial-variables:
     name: DevOps - Initial Variables
     runs-on: ubuntu-latest
