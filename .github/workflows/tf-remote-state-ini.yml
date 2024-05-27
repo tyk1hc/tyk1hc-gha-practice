@@ -55,7 +55,7 @@ jobs:
           inlineScript: |
             az version
 
-            echo $inputs.param_resource_group_name
+            echo ${{inputs.param_resource_group_name}}
 
             # Check and create terraform remote state resource group
             if [ $(az group exists --name $RESOURCE_GROUP_NAME) = false ]; then
