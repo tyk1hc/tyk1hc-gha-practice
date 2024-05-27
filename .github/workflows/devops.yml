@@ -7,14 +7,14 @@ on:
  workflow_dispatch:
 
 env:
-  ENV_STORAGE_ACCOUNT_NAME: storagetfstatelearning
-  ENV_STORAGE_ACCOUNT_LOCATION: southeastasia
+  TF_REMOTE_STATE_STORAGE_ACCOUNT_NAME: storagetfstatelearning
+  TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION: southeastasia
 
-  ENV_RESOURCE_GROUP_NAME: rg-tf-state-learning
-  ENV_RESOURCE_GROUP_LOCATION: southeastasia
+  TF_REMOTE_STATE_RESOURCE_GROUP_NAME: rg-tf-state-learning
+  TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION: southeastasia
 
-  ENV_CONTAINER_NAME: tfstatelearning
-  ENV_BLOB_NAME: tflearning.tfstate
+  TF_REMOTE_STATE_CONTAINER_NAME: tfstatelearning
+  TF_REMOTE_STATE_BLOB_NAME: tflearning.tfstate
 
 jobs:
 
@@ -22,12 +22,29 @@ jobs:
   #tf-unit-tests:
   #  uses: ./.github/workflows/tf-unit-tests.yml
 
+  devops-initial-variables:
+    name: DevOps - Initial Variables
+    runs-on: ubuntu-latest
+    outputs:
+      variable_Resource_Group_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_RESOURCE_GROUP_NAME }}
+      variable_Resource_Group_location: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION }}
+    steps:
+      - name: Set Initial Variables
+        id: Step-devops-initial-variables
+        run: |
+          echo "Terraform Remote Storage Resource Group Name: $TF_REMOTE_STATE_RESOURCE_GROUP_NAME"
+          echo "Step_TF_REMOTE_STATE_RESOURCE_GROUP_NAME=$TF_REMOTE_STATE_RESOURCE_GROUP_NAME" >> $GITHUB_OUTPUT
+          echo "Terraform Remote State Resource Group Location: $TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION"
+          echo "Step_TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION=$TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION" >> $GITHUB_OUTPUT
+
+
   deploy-azure-infra-terraform:
+    needs: [devops-initial-variables]
     uses: ./.github/workflows/tf-remote-state-ini.yml
     with:
       param_env: development
       param_runner: ubuntu-latest
-      param_resource_group_name: $ENV_RESOURCE_GROUP_NAME
-      param_resource_group_location: $ENV_RESOURCE_GROUP_LOCATION
+      param_resource_group_name: ${{ needs.devops-initial-variables.outputs.variable_Resource_Group_Name }}
+      param_resource_group_location: ${{ needs.devops-initial-variables.outputs.variable_Resource_Group_location }}
     secrets:
       param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
