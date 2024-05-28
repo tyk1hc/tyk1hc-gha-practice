@@ -115,7 +115,7 @@ jobs:
               else
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
                 echo "working directory $AZ_CLI_WORKING_DIRECTORY"
-                #cd "${{ inputs.param_working_directory }}/${{inputs.param_env}}"
+                cd "${{ inputs.param_working_directory }}/${{inputs.param_env}}"
                 #echo "inside the $AZ_CLI_WORKING_DIRECTORY"
                 echo "test file" > file.txt
               fi
