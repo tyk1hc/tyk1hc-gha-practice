@@ -117,18 +117,17 @@ jobs:
                 #echo "working directory $AZ_CLI_WORKING_DIRECTORY"
                 #cd $AZ_CLI_WORKING_DIRECTORY
                 cd ${{github.workspace}}/stardog/environments/development
-                ls
                 cat <<EOT > backend.tf
                 terraform {
                   backend "azurerm" {
-                    resource_group_name   = "$RESOURCE_GROUP_NAME"
-                    storage_account_name  = "$STORAGE_ACCOUNT_NAME"
-                    container_name        = "$CONTAINER_NAME"
-                    key                   = "$BLOB_NAME"
+                    resource_group_name   = "$AZ_CLI_RESOURCE_GROUP_NAME"
+                    storage_account_name  = "$AZ_CLI_STORAGE_ACCOUNT_NAME"
+                    container_name        = "$AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME"
+                    key                   = "$AZ_CLI_STORAGE_ACCOUNT_BLOB_NAME"
                   }
                 }
                 EOT
-
+                ls
                 cat backend.tf
 
               fi
