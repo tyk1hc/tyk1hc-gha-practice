@@ -65,37 +65,40 @@ jobs:
           inlineScript: |
             az version
 
-            resourceGroupName=${{inputs.param_resource_group_name}}
-            resourceGroupLocation=${{ inputs.param_resource_group_location}}
-            storageAccountName=${{ inputs.param_storage_account_name }}
-            storageAccountLocation=${{ inputs.param_storage_account_location }}
-            storageAccountContainerName=${{ inputs.param_storage_container_name }}
-            storageAccountBlobName=${{ inputs.param_storage_blob_name }}
+            AZ_CLI_RESOURCE_GROUP_NAME=${{inputs.param_resource_group_name}}
+            AZ_CLI_RESOURCE_GROUP_LOCATION=${{ inputs.param_resource_group_location}}
+            AZ_CLI_STORAGE_ACCOUNT_NAME=${{ inputs.param_storage_account_name }}
+            AZ_CLI_STORAGE_ACCOUNT_LOCATION=${{ inputs.param_storage_account_location }}
+            AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME=${{ inputs.param_storage_container_name }}
+            AZ_CLI_STORAGE_ACCOUNT_BLOB_NAME=${{ inputs.param_storage_blob_name }}
 
-            echo $resourceGroupName
+            echo "-------------Resource Group Name: $AZ_CLI_RESOURCE_GROUP_NAME --------------------------------------"
 
             # Check and create terraform remote state RESOURCE GROUP
-            if [ $(az group exists --name $resourceGroupName) = false ]; then
-              az group create --name $resourceGroupName --location $resourceGroupLocation
-              echo "step-output-rg-result = $resourceGroupName created successfully!"
+            if [ $(az group exists --name $AZ_CLI_RESOURCE_GROUP_NAME) = false ]; then
+              az group create --name $AZ_CLI_RESOURCE_GROUP_NAME --location $AZ_CLI_RESOURCE_GROUP_LOCATION
+              echo "step-output-rg-result = $AZ_CLI_RESOURCE_GROUP_NAME created successfully!"
             else
-              echo "step-output-rg-result = $resourceGroupName already exist!"
+              echo "step-output-rg-result = $AZ_CLI_RESOURCE_GROUP_NAME already exist!"
             fi
 
-            echo "------------Storage Account Name:  $storageAccountName ------------------------------------"
+            echo "------------Storage Account Name:  $AZ_CLI_STORAGE_ACCOUNT_NAME ------------------------------------"
 
             # Check and create terraform remote state STORAGE ACCOUNT
-            isStorageAccountExist=$(az storage account check-name --name $storageAccountName --query nameAvailable)
-            if [ $isStorageAccountExist = true ]; then
-              az storage account create --name $storageAccountName --resource-group $resourceGroupName --location $storageAccountLocation --sku Standard_LRS --encryption-services blob
-              echo "step-output-storage-account-result = $storageAccountName created successfully!"
+            AZ_CLI_IS_STORAGE_ACCOUNT_EXIST=$(az storage account check-name --name $AZ_CLI_STORAGE_ACCOUNT_NAME --query nameAvailable)
+            if [ $AZ_CLI_IS_STORAGE_ACCOUNT_EXIST = true ]; then
+              az storage account create --name $AZ_CLI_STORAGE_ACCOUNT_NAME --resource-group $AZ_CLI_RESOURCE_GROUP_NAME --location $AZ_CLI_STORAGE_ACCOUNT_LOCATION --sku Standard_LRS --encryption-services blob
+              echo "step-output-storage-account-result = $AZ_CLI_STORAGE_ACCOUNT_NAME created successfully!"
             else
-              echo "step-output-storage-account-result = $storageAccountName already exist!"
+              echo "step-output-storage-account-result = $AZ_CLI_STORAGE_ACCOUNT_NAME already exist!"
             fi
 
             # Check and create terraform remote state STORAGE CONTAINER
             if [ $isStorageAccountExist = false ]; then
               # Get storage account key
-             
+              AZ_CLI_ACCOUNT_KEY=$(az storage account keys list --resource-group $AZ_CLI_RESOURCE_GROUP_NAME --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
+              AZ_CLI_ACCOUNT_CONTAINER_EXISTS=$(az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME --query exists)
+              echo "account container exist: $AZ_CLI_ACCOUNT_CONTAINER_EXISTS"
             else
+              echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
             fi
