@@ -76,6 +76,7 @@ jobs:
             fi
 
             echo ${{ inputs.param_storage_account_name }}
+            az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable
 
             # Check and create terraform remote state storage account
             if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}} --query "nameAvailable") = false ]; then
