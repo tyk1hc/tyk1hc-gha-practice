@@ -117,7 +117,7 @@ jobs:
                 #echo "working directory $AZ_CLI_WORKING_DIRECTORY"
                 #cd $AZ_CLI_WORKING_DIRECTORY
                 cd ${{github.workspace}}/stardog/environments/development
-                cat <<EOT > backend.tf
+                cat > backend.tf << EOF
                 terraform {
                   backend "azurerm" {
                     resource_group_name   = "$AZ_CLI_RESOURCE_GROUP_NAME"
