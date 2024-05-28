@@ -50,7 +50,7 @@ jobs:
     outputs:
       create-rg-result-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-rg-result }}
       create-storage-account-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-account-result }}
-      create-storage-container-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-container-result }}
+      create-storage-container-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-account-container-result }}
     steps:
       # Login to Azure with Service Principal
       - name: Login to Azure with Service Principal
@@ -100,7 +100,12 @@ jobs:
               # Get storage account key
               AZ_CLI_ACCOUNT_KEY=$(az storage account keys list --resource-group $AZ_CLI_RESOURCE_GROUP_NAME --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
               AZ_CLI_ACCOUNT_CONTAINER_EXISTS=$(az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME --query exists)
-              echo "account container exist: $AZ_CLI_ACCOUNT_CONTAINER_EXISTS"
-            else
-              echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
+
+              if [ $AZ_CLI_ACCOUNT_CONTAINER_EXISTS = false ]; then
+                az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME
+                echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME created successfully!"
+              else
+                echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
+                echo "working directory" $WORKING_DIRECTORY
+              fi
             fi
