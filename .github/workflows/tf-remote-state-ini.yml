@@ -96,7 +96,7 @@ jobs:
             echo "-------------Storage Account Container Name: $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME ---------------"
 
             # Check and create terraform remote state STORAGE CONTAINER
-            if [ $isStorageAccountExist = false ]; then
+            if [ $AZ_CLI_IS_STORAGE_ACCOUNT_EXIST = false ]; then
               # Get storage account key
               AZ_CLI_ACCOUNT_KEY=$(az storage account keys list --resource-group $AZ_CLI_RESOURCE_GROUP_NAME --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
               AZ_CLI_ACCOUNT_CONTAINER_EXISTS=$(az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME --query exists)
