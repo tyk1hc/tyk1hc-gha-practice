@@ -78,7 +78,7 @@ jobs:
             echo ${{ inputs.param_storage_account_name }}
 
             # Check and create terraform remote state storage account
-            if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = false ]; then
+            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}}).nameAvailable = false ]; then
               az storage account create --name ${{ inputs.param_storage_account_name }} --resource-group ${{inputs.param_resource_group_name}} --sku Standard_LRS --encryption-services blob
               echo "step-output-storage-account-result = ${{inputs.param_storage_account_name}} Created Successfully!"
             else
@@ -86,7 +86,7 @@ jobs:
             fi
 
             # Check and create terraform remote storage account container
-            if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = true ]; then
+            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}}).nameAvailable = true ]; then
               az storage container list --account-name storagetfstatelearning
               echo "step-output-storage-container-result = ${{inputs.param_storage_account_name}} Created Successfully!"
             fi
