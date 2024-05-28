@@ -29,14 +29,30 @@ jobs:
     outputs:
       variable_Resource_Group_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_RESOURCE_GROUP_NAME }}
       variable_Resource_Group_location: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION }}
+      variable_Storage_Acccount_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_STORAGE_ACCOUNT_NAME }}
+      variable_Storage_Account_Location: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION }}
+      variable_Storage_Container_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_CONTAINER_NAME }}
+      variable_Storage_Blob_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_BLOB_NAME }}
     steps:
       - name: Set Initial Variables
         id: Step-devops-initial-variables
         run: |
+          # Terraform Remote Storage Resource Group
           echo "Terraform Remote Storage Resource Group Name: $TF_REMOTE_STATE_RESOURCE_GROUP_NAME"
           echo "Step_TF_REMOTE_STATE_RESOURCE_GROUP_NAME=$TF_REMOTE_STATE_RESOURCE_GROUP_NAME" >> $GITHUB_OUTPUT
           echo "Terraform Remote State Resource Group Location: $TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION"
           echo "Step_TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION=$TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION" >> $GITHUB_OUTPUT
+
+          # Terraform Remote Storage Account
+          echo "Terraform Remote Storage Account Name: $TF_REMOTE_STATE_STORAGE_ACCOUNT_NAME"
+          echo "Step_TF_REMOTE_STATE_STORAGE_ACCOUNT_NAME=$TF_REMOTE_STATE_STORAGE_ACCOUNT_NAME" >> $GITHUB_OUTPUT
+          echo "Terraform Remote Storage Account Location: $TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION"
+          echo "Step_TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION=$TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION" >> $GITHUB_OUTPUT
+
+          echo "Terraform Remote State Container Name: $TF_REMOTE_STATE_CONTAINER_NAME"
+          echo "Step_TF_REMOTE_STATE_CONTAINER_NAME=$TF_REMOTE_STATE_CONTAINER_NAME" >> $GITHUB_OUTPUT
+          echo "Terraform Remote State Blob Name: $TF_REMOTE_STATE_BLOB_NAME"
+          echo "Step_TF_REMOTE_STATE_BLOB_NAME=$TF_REMOTE_STATE_BLOB_NAME" >> $GITHUB_OUTPUT
 
 
   deploy-azure-infra-terraform:
@@ -47,5 +63,9 @@ jobs:
       param_runner: ubuntu-latest
       param_resource_group_name: ${{ needs.devops-initial-variables.outputs.variable_Resource_Group_Name }}
       param_resource_group_location: ${{ needs.devops-initial-variables.outputs.variable_Resource_Group_location }}
+      param_storage_account_name: ${{ needs.devops-initial-variables.outputs.variable_Storage_Acccount_Name }}
+      param_storage_account_location: ${{ needs.devops-initial-variables.outputs.variable_Storage_Account_Location }}
+      param_storage_container_name: ${{ needs.devops-initial-variables.outputs.variable_Storage_Container_Name }}
+      param_storage_blob_name: ${{ needs.devops-initial-variables.outputs.variable_Storage_Blob_Name }}
     secrets:
       param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
