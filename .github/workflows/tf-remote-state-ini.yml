@@ -49,7 +49,8 @@ jobs:
 
     outputs:
       create-rg-result-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-rg-result }}
-
+      create-storage-account-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-account-result }}
+      create-storage-container-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-container-result }}
     steps:
       # Login to Azure with Service Principal
       - name: Login to Azure with Service Principal
@@ -78,10 +79,14 @@ jobs:
 
             # Check and create terraform remote state storage account
             if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = false ]; then
-              az storage account create --name ${{ inputs.param_storage_account_name }} --resource-group ${{inputs.param_resource_group_name}} --sku Standard_LRS --encryption-services blob            
+              az storage account create --name ${{ inputs.param_storage_account_name }} --resource-group ${{inputs.param_resource_group_name}} --sku Standard_LRS --encryption-services blob
+              echo "step-output-storage-account-result = ${{inputs.param_storage_account_name}} Created Successfully!"
+            else
+              echo "step-output-storage-account-result = ${{inputs.param_storage_account_name}} already exist!"
             fi
 
             # Check and create terraform remote storage account container
             if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = true ]; then
               az storage container list --account-name storagetfstatelearning
+              echo "step-output-storage-container-result = ${{inputs.param_storage_account_name}} Created Successfully!"
             fi
