@@ -125,8 +125,7 @@ jobs:
                     container_name        = "$AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME"
                     key                   = "$AZ_CLI_STORAGE_ACCOUNT_BLOB_NAME"
                   }
-                }
-                EOT
+                }EOT
 
                 cat backend.tf
 
