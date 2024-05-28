@@ -66,31 +66,36 @@ jobs:
             az version
 
             resourceGroupName=${{inputs.param_resource_group_name}}
+            resourceGroupLocation=${{ inputs.param_resource_group_location}}
+            storageAccountName=${{ inputs.param_storage_account_name }}
+            storageAccountLocation=${{ inputs.param_storage_account_location }}
+            storageAccountContainerName=${{ inputs.param_storage_container_name }}
+            storageAccountBlobName=${{ inputs.param_storage_blob_name }}
 
             echo $resourceGroupName
 
             # Check and create terraform remote state RESOURCE GROUP
-            if [ $(az group exists --name ${{inputs.param_resource_group_name}}) = false ]; then
-              az group create --name ${{inputs.param_resource_group_name}} --location ${{ inputs.param_resource_group_location}}
-              echo "step-output-rg-result = ${{inputs.param_resource_group_name}} created successfully!"
+            if [ $(az group exists --name $resourceGroupName) = false ]; then
+              az group create --name $resourceGroupName --location $resourceGroupLocation
+              echo "step-output-rg-result = $resourceGroupName created successfully!"
             else
-              echo "step-output-rg-result = ${{inputs.param_resource_group_name}} already exist!"
+              echo "step-output-rg-result = $resourceGroupName already exist!"
             fi
 
-            echo "------------Storage Account Name:  ${{ inputs.param_storage_account_name }} ------------------------------------"
+            echo "------------Storage Account Name:  $storageAccountName ------------------------------------"
 
             # Check and create terraform remote state STORAGE ACCOUNT
-            isStorageAccountExist=$(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable)
+            isStorageAccountExist=$(az storage account check-name --name $storageAccountName --query nameAvailable)
             if [ $isStorageAccountExist = true ]; then
-              az storage account create --name ${{ inputs.param_storage_account_name }} --resource-group ${{inputs.param_resource_group_name}} --sku Standard_LRS --encryption-services blob
-              echo "step-output-storage-account-result = ${{inputs.param_storage_account_name}} created successfully!"
+              az storage account create --name $storageAccountName --resource-group $resourceGroupName --location $storageAccountLocation --sku Standard_LRS --encryption-services blob
+              echo "step-output-storage-account-result = $storageAccountName created successfully!"
             else
-              echo "step-output-storage-account-result = ${{inputs.param_storage_account_name}} already exist!"
+              echo "step-output-storage-account-result = $storageAccountName already exist!"
             fi
 
             # Check and create terraform remote state STORAGE CONTAINER
             if [ $isStorageAccountExist = false ]; then
               # Get storage account key
-              ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name ${{ inputs.param_storage_account_name }} --query [0].value -o tsv)
+             
             else
             fi
