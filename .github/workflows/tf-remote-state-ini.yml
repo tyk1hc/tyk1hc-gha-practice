@@ -116,6 +116,8 @@ jobs:
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
                 #echo "working directory $AZ_CLI_WORKING_DIRECTORY"
                 #cd $AZ_CLI_WORKING_DIRECTORY
-                pwd
+                cd ${{github.workspace}}/stardog/environments/development
+                ls
+                #cat > filename.txt
               fi
             fi
