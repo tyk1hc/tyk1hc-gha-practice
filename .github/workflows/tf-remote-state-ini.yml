@@ -77,8 +77,8 @@ jobs:
             echo ${{ inputs.param_storage_account_name }}
 
             # Check and create terraform remote state storage account
-            if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = null ]; then
-              echo "null"
+            if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = false ]; then
+              echo "false"
             else
-              echo $(az group exists --name ${{inputs.param_storage_account_name}}).reason
+              echo "true"
             fi
