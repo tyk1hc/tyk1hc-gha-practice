@@ -3,20 +3,32 @@ name: "Terraform Initial"
 on:
   workflow_call:
     inputs:
-      param_env:
+      param_env: # Environment
         required: true
         type: string
-      param_runner:
+      param_runner: # Runner
         required: true
         type: string
-      param_resource_group_name:
+      param_resource_group_name: # Resource Group Name
         required: true
         type: string
-      param_resource_group_location:
+      param_resource_group_location: # Resource Group Location
+        required: true
+        type: string
+      param_storage_account_name: # Storage Account Name
+        required: true
+        type: string
+      param_storage_account_location: # Storage Account Location
+        required: true
+        type: string
+      param_storage_container_name: # Storage Container Name
+        required: true
+        type: string
+      param_storage_blob_name: # Storage Blob Name
         required: true
         type: string
     secrets:
-      param_azure_credentials:
+      param_azure_credentials: # Credentials
         required: true
     outputs:
       azure-resource-group-result:
@@ -29,9 +41,6 @@ jobs:
     name: Create Azure Resource Group
     runs-on: ${{ inputs.param_runner }}
     #environment: ${{ inputs.param_env }}
-    env:
-      RESOURCE_GROUP_NAME: ${{ inputs.param_resource_group_name}}
-      RESOURCE_GROUP_LOCATION: ${{ inputs.param_resource_group_location}}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -63,4 +72,13 @@ jobs:
               echo "step-output-rg-result = ${{inputs.param_resource_group_name}} Created Successfully!"
             else
               echo "step-output-rg-result = ${{inputs.param_resource_group_name}} already exist!"
+            fi
+
+            echo ${{ inputs.param_storage_account_name }}
+
+            # Check and create terraform remote state storage account
+            if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = null ]; then
+              echo "null"
+            else
+              echo "not null"
             fi
