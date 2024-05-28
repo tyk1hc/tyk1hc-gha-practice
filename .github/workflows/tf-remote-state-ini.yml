@@ -102,7 +102,7 @@ jobs:
               AZ_CLI_ACCOUNT_CONTAINER_EXISTS=$(az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME --query exists)
 
               if [ $AZ_CLI_ACCOUNT_CONTAINER_EXISTS = false ]; then
-                az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME
+                az storage container create --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME created successfully!"
               else
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
