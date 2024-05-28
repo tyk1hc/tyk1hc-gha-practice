@@ -82,7 +82,7 @@ jobs:
               echo "step-output-rg-result = $AZ_CLI_RESOURCE_GROUP_NAME already exist!"
             fi
 
-            echo "------------Storage Account Name:  $AZ_CLI_STORAGE_ACCOUNT_NAME ------------------------------------"
+            echo "------------Storage Account Name: $AZ_CLI_STORAGE_ACCOUNT_NAME ------------------------------------"
 
             # Check and create terraform remote state STORAGE ACCOUNT
             AZ_CLI_IS_STORAGE_ACCOUNT_EXIST=$(az storage account check-name --name $AZ_CLI_STORAGE_ACCOUNT_NAME --query nameAvailable)
@@ -92,6 +92,8 @@ jobs:
             else
               echo "step-output-storage-account-result = $AZ_CLI_STORAGE_ACCOUNT_NAME already exist!"
             fi
+
+            echo "-------------Storage Account Container Name: $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME ---------------"
 
             # Check and create terraform remote state STORAGE CONTAINER
             if [ $isStorageAccountExist = false ]; then
