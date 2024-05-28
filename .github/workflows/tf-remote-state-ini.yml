@@ -49,6 +49,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: "${{ inputs.param_working_directory }}/${{inputs.param_env}}"
 
     outputs:
       create-rg-result-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-rg-result }}
@@ -114,8 +115,8 @@ jobs:
               else
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
                 echo "working directory $AZ_CLI_WORKING_DIRECTORY"
-                cd $AZ_CLI_WORKING_DIRECTORY
-                echo "inside the $AZ_CLI_WORKING_DIRECTORY"
+                #cd "${{ inputs.param_working_directory }}/${{inputs.param_env}}"
+                #echo "inside the $AZ_CLI_WORKING_DIRECTORY"
                 echo "test file" > file.txt
               fi
             fi
