@@ -68,18 +68,17 @@ jobs:
             echo ${{inputs.param_resource_group_name}}
 
             # Check and create terraform remote state resource group
-            if [ $(az group exists --name ${{inputs.param_resource_group_name}}) == false ]; then
+            if [ $(az group exists --name ${{inputs.param_resource_group_name}}) = false ]; then
               az group create --name ${{inputs.param_resource_group_name}} --location ${{ inputs.param_resource_group_location}}
               echo "step-output-rg-result = ${{inputs.param_resource_group_name}} Created Successfully!"
             else
               echo "step-output-rg-result = ${{inputs.param_resource_group_name}} already exist!"
             fi
 
-            echo ${{ inputs.param_storage_account_name }}
-            az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable
+            echo "----------------------------- ${{ inputs.param_storage_account_name }} ------------------------------------"
 
             # Check and create terraform remote state storage account
-            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable) == false ]; then
+            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable) = false ]; then
               az storage account create --name ${{ inputs.param_storage_account_name }} --resource-group ${{inputs.param_resource_group_name}} --sku Standard_LRS --encryption-services blob
               echo "step-output-storage-account-result = ${{inputs.param_storage_account_name}} Created Successfully!"
             else
@@ -87,7 +86,7 @@ jobs:
             fi
 
             # Check and create terraform remote storage account container
-            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable) == true ]; then
-              az storage container list --account-name storagetfstatelearning
+            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable) = true ]; then
+              #az storage container list --account-name storagetfstatelearning
               echo "step-output-storage-container-result = ${{inputs.param_storage_account_name}} Created Successfully!"
             fi
