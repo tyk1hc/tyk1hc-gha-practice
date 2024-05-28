@@ -114,8 +114,8 @@ jobs:
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME created successfully!"
               else
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
-                echo "working directory $AZ_CLI_WORKING_DIRECTORY"
-                cd $AZ_CLI_WORKING_DIRECTORY
-                ls $AZ_CLI_WORKING_DIRECTORY
+                #echo "working directory $AZ_CLI_WORKING_DIRECTORY"
+                #cd $AZ_CLI_WORKING_DIRECTORY
+                ls $github.workspace
               fi
             fi
