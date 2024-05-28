@@ -80,5 +80,5 @@ jobs:
             if [ $(az group exists --name ${{inputs.param_storage_account_name}}) = null ]; then
               echo "null"
             else
-              echo "not null"
+              echo $(az group exists --name ${{inputs.param_storage_account_name}}).reason
             fi
