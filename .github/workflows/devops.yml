@@ -16,6 +16,8 @@ env:
   TF_REMOTE_STATE_CONTAINER_NAME: tfstatelearning
   TF_REMOTE_STATE_BLOB_NAME: tflearning.tfstate
 
+  TF_WORKING_DIRECTORY: stardog/environments
+
 jobs:
 
   # Run unit test to check terraform environment
@@ -33,6 +35,7 @@ jobs:
       variable_Storage_Account_Location: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION }}
       variable_Storage_Container_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_CONTAINER_NAME }}
       variable_Storage_Blob_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_BLOB_NAME }}
+      variable_Working_Directory: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_WORKING_DIRECTORY }}
     steps:
       - name: Set Initial Variables
         id: Step-devops-initial-variables
@@ -54,6 +57,9 @@ jobs:
           echo "Terraform Remote State Blob Name: $TF_REMOTE_STATE_BLOB_NAME"
           echo "Step_TF_REMOTE_STATE_BLOB_NAME=$TF_REMOTE_STATE_BLOB_NAME" >> $GITHUB_OUTPUT
 
+          echo "Terraform Working Directory: $TF_WORKING_DIRECTORY"
+          echo "Step_TF_WORKING_DIRECTORY=$TF_WORKING_DIRECTORY" >> $GITHUB_OUTPUT
+
 
   deploy-azure-infra-terraform:
     needs: [devops-initial-variables]
@@ -67,5 +73,6 @@ jobs:
       param_storage_account_location: ${{ needs.devops-initial-variables.outputs.variable_Storage_Account_Location }}
       param_storage_container_name: ${{ needs.devops-initial-variables.outputs.variable_Storage_Container_Name }}
       param_storage_blob_name: ${{ needs.devops-initial-variables.outputs.variable_Storage_Blob_Name }}
+      param_working_directory: ${{ needs.devops-initial-variables.outputs.variable_Working_Directory }}
     secrets:
       param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
