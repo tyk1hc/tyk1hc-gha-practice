@@ -118,6 +118,17 @@ jobs:
                 #cd $AZ_CLI_WORKING_DIRECTORY
                 cd ${{github.workspace}}/stardog/environments/development
                 ls
-                cat > filename.txt
+                cat <<EOT > testtt.tf
+                terraform {
+                  backend "azurerm" {
+                    resource_group_name   = "$RESOURCE_GROUP_NAME"
+                    storage_account_name  = "$STORAGE_ACCOUNT_NAME"
+                    container_name        = "$CONTAINER_NAME"
+                    key                   = "$BLOB_NAME"
+                  }
+                }
+                EOT
+
+                cat testtt.tf
               fi
             fi
