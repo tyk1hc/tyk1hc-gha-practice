@@ -79,7 +79,7 @@ jobs:
 
             # Check and create terraform remote state storage account
             isStorageAccountAvail = az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable
-            if $isStorageAccountAvail; then
+            if [ $isStorageAccountAvail = false ]; then
               cho "If"
             else
               echo "Else"
