@@ -55,6 +55,9 @@ jobs:
       create-storage-account-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-account-result }}
       create-storage-container-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-storage-account-container-result }}
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       # Login to Azure with Service Principal
       - name: Login to Azure with Service Principal
         uses: Azure/login@v2
