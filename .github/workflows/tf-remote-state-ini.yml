@@ -74,7 +74,7 @@ jobs:
             AZ_CLI_STORAGE_ACCOUNT_LOCATION=${{ inputs.param_storage_account_location }}
             AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME=${{ inputs.param_storage_container_name }}
             AZ_CLI_STORAGE_ACCOUNT_BLOB_NAME=${{ inputs.param_storage_blob_name }}
-            AZ_CLI_WORKING_DIRECTORY="${{ inputs.param_working_directory }}/${{inputs.param_env}}"
+            AZ_CLI_WORKING_DIRECTORY="${{ github.workspace }}/${{ inputs.param_working_directory }}/${{inputs.param_env}}"
 
             echo "-------------Resource Group Name: $AZ_CLI_RESOURCE_GROUP_NAME --------------------------------------"
 
@@ -112,7 +112,7 @@ jobs:
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
                 echo "working directory $AZ_CLI_WORKING_DIRECTORY"
                 echo "${{ github.workspace }}"
-                #cd $AZ_CLI_WORKING_DIRECTORY
-                #echo "test file" > file.txt
+                cd $AZ_CLI_WORKING_DIRECTORY
+                echo "test file" > file.txt
               fi
             fi
