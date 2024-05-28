@@ -78,8 +78,9 @@ jobs:
             echo "----------------------------- ${{ inputs.param_storage_account_name }} ------------------------------------"
 
             # Check and create terraform remote state storage account
-            if [ $(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable) = false ]; then
-              cho "If"
+            isStorageAccountExist=$(az storage account check-name --name ${{inputs.param_storage_account_name}} --query nameAvailable)
+            if [ $isStorageAccountExist = false ]; then
+              echo "If"
             else
               echo "Else"
             fi
