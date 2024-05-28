@@ -118,6 +118,6 @@ jobs:
                 #cd $AZ_CLI_WORKING_DIRECTORY
                 cd ${{github.workspace}}/stardog/environments/development
                 ls
-                #cat > filename.txt
+                cat > filename.txt
               fi
             fi
