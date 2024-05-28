@@ -111,7 +111,8 @@ jobs:
               else
                 echo "step-output-storage-account-container-result = $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME already exist!"
                 echo "working directory $AZ_CLI_WORKING_DIRECTORY"
-                cd $AZ_CLI_WORKING_DIRECTORY
-                echo "test file" > file.txt
+                echo "${{ github.workspace }}"
+                #cd $AZ_CLI_WORKING_DIRECTORY
+                #echo "test file" > file.txt
               fi
             fi
