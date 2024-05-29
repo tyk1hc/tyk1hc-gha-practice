@@ -6,6 +6,10 @@ on:
    paths: ./.github/workflows/devops.yml
  workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   TF_REMOTE_STATE_STORAGE_ACCOUNT_NAME: storagetfstatelearning
   TF_REMOTE_STATE_STORAGE_ACCOUNT_LOCATION: southeastasia
