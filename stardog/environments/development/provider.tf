@@ -21,4 +21,5 @@ provider "azurerm" {
   # information can be found here:
   # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block
   features {}
+  use_oidc = true
 }

@@ -33,6 +33,10 @@ on:
     secrets:
       param_azure_credentials: # Credentials
         required: true
+      param_azure_subscription: # Azure Subscription
+        required: true
+      param_azure_tenant: # Azure Tenant
+        required: true
     outputs:
       azure-resource-group-result:
         description: "Azure Resource Group Result"
@@ -121,23 +125,43 @@ jobs:
               fi
             fi
 
-      # Install the latest version of Terraform CLI
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.8.4
-
-      - name: Terraform Init
-        id: init
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_LEARNING_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_LEARNING_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.ARM_LEARNING_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_LEARNING_SUBSCRIPTION_ID }}
+      - name: Create Backend.tf
         run: |
+          cd ${{ inputs.param_working_directory }}
+
+          cat > backend.tf << EOF
+          terraform {
+            backend "azurerm" {
+              resource_group_name  = "${{inputs.param_resource_group_name}}"
+              storage_account_name = "${{ inputs.param_storage_account_name }}"
+              container_name       = "${{ inputs.param_storage_container_name }}"
+              key                  = "${{ inputs.param_storage_blob_name }}"
+              use_oidc             = true
+              subscription_id      = "${{ secrets.param_azure_subscription }}"
+              tenant_id            = "${{ secrets.param_azure_tenant }}"
+            }
+          }
+          EOF
+
+          cat backend.tf
+
+      # Install the latest version of Terraform CLI
+    #  - name: Install Terraform
+    #    uses: hashicorp/setup-terraform@v1
+    #    with:
+    #      terraform_version: 1.8.4
+
+      #- name: Terraform Init
+      #  id: init
+      #  env:
+      #    ARM_CLIENT_ID: ${{ secrets.ARM_LEARNING_CLIENT_ID }}
+      #    ARM_CLIENT_SECRET: ${{ secrets.ARM_LEARNING_CLIENT_SECRET }}
+      #    ARM_TENANT_ID: ${{ secrets.ARM_LEARNING_TENANT_ID }}
+      #    ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_LEARNING_SUBSCRIPTION_ID }}
+      #  run: |
             # Initialize a new or existing Terraform working directory by creating initial files,
             # loading any remote state, downloading modules, etc.
-            terraform init
+      #      terraform init
 
             # Either use the backend.tf file with the config inside or use the following command line
             # terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
@@ -145,7 +169,7 @@ jobs:
             #                -backend-config="resource_group_name=$RESOURCE_GROUP_NAME"
 
       # Checks that all Terraform configuration files adhere to a canonical format
-      - name: Terraform Format
-        id: format
-        run: terraform fmt -check
-        continue-on-error: true
+      #- name: Terraform Format
+      #  id: format
+      #  run: terraform fmt -check
+      #  continue-on-error: true
