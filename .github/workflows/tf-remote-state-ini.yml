@@ -33,6 +33,8 @@ on:
     secrets:
       param_azure_credentials: # Credentials
         required: true
+      param_azure_client_id: # Client Id
+        required: true
       param_azure_subscription: # Azure Subscription
         required: true
       param_azure_tenant: # Azure Tenant
@@ -135,7 +137,11 @@ jobs:
               resource_group_name  = "${{inputs.param_resource_group_name}}"
               storage_account_name = "${{ inputs.param_storage_account_name }}"
               container_name       = "${{ inputs.param_storage_container_name }}"
-              key                  = "${{ inputs.param_storage_blob_name }}"              
+              key                  = "${{ inputs.param_storage_blob_name }}"
+              use_oidc             = true
+              client_id            = "${{ secrets.param_azure_client_id }}"
+              subscription_id      = "${{ secrets.param_azure_subscription }}"
+              tenant_id            = "${{ secrets.param_azure_tenant }}"
             }
           }
           EOF

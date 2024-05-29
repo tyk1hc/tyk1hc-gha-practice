@@ -106,5 +106,6 @@ jobs:
       param_working_directory: ${{ needs.devops-initial-variables.outputs.variable_Working_Directory }}
     secrets:
       param_azure_credentials: ${{ secrets.AZURE_LEARNING_CREDENTIALS }}
+      param_azure_client_id: ${{ secrets.ARM_LEARNING_CLIENT_ID }}
       param_azure_subscription: ${{ secrets.ARM_LEARNING_SUBSCRIPTION_ID }}
       param_azure_tenant: ${{ secrets.ARM_LEARNING_TENANT_ID }}
