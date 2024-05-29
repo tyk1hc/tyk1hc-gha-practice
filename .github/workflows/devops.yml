@@ -95,6 +95,7 @@ jobs:
     name: Deploy Azure Infra
     uses: ./.github/workflows/tf-remote-state-ini.yml
     with:
+      env: development
       param_env: development
       param_runner: ubuntu-latest
       param_resource_group_name: ${{ needs.devops-initial-variables.outputs.variable_Resource_Group_Name }}

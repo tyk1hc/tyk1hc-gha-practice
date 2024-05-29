@@ -70,7 +70,7 @@ jobs:
         uses: actions/checkout@v4
 
       # Login to Azure with Service Principal
-      - name: Login to Azure with Service Principal
+      - name: Login to Azure with OIDC
         uses: Azure/login@v2
         with:
           client-id: ${{ secrets.param_azure_client_id }}
