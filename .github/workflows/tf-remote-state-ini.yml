@@ -1,4 +1,4 @@
-name: "Terraform Initial"
+name: "Deploy Azure Infra - Detail"
 
 on:
   workflow_call:
@@ -47,13 +47,13 @@ jobs:
   create-azure-resource-group:
     name: Create Azure Resource Group
     runs-on: ${{ inputs.param_runner }}
-    #environment: ${{ inputs.param_env }}
+    environment: ${{ inputs.param_env }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
-        #working-directory: ${{ inputs.param_working_directory }}/${{inputs.param_env}}
+        working-directory: ${{ inputs.param_working_directory }}
 
     outputs:
       create-rg-result-output: ${{ steps.step-id-create-azure-rg.outputs.step-output-rg-result }}

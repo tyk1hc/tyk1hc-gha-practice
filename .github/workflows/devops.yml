@@ -92,6 +92,7 @@ jobs:
 
   deploy-azure-infra-terraform:
     needs: [devops-initial-variables]
+    name: Deploy Azure Infra
     uses: ./.github/workflows/tf-remote-state-ini.yml
     with:
       param_env: development
