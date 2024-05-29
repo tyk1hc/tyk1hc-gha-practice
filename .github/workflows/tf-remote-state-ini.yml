@@ -59,6 +59,7 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.param_azure_client_id }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.param_azure_subscription }}
       ARM_TENANT_ID: ${{ secrets.param_azure_tenant }}
+      AZURE_LEARNING_CREDENTIALS: ${{ secrets.param_azure_credentials }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -78,9 +79,7 @@ jobs:
       - name: Login to Azure with OIDC
         uses: Azure/login@v2
         with:
-          client-id: ${{ env.ARM_CLIENT_ID }}
-          tenant-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-          subscription-id: ${{ env.ARM_TENANT_ID }}
+          creds: ${{ env.AZURE_LEARNING_CREDENTIALS }}
 
       - name: Create Azure Resource Group
         id: step-id-create-azure-rg
