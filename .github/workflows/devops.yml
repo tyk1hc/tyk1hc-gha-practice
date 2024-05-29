@@ -51,6 +51,8 @@ jobs:
   devops-initial-variables:
     name: DevOps - Initial Variables
     runs-on: ubuntu-latest
+    environment: development
+    needs: [scan-terraform-config]
     outputs:
       variable_Resource_Group_Name: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_RESOURCE_GROUP_NAME }}
       variable_Resource_Group_location: ${{ steps.Step-devops-initial-variables.outputs.Step_TF_REMOTE_STATE_RESOURCE_GROUP_LOCATION }}
