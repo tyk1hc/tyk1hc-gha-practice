@@ -30,6 +30,7 @@ jobs:
   scan-terraform-config:
     runs-on: ubuntu-latest
     name: Scan Terraform with Checov
+    environment: development
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -92,8 +93,8 @@ jobs:
 
   deploy-azure-infra-terraform:
     needs: [devops-initial-variables]
-    name: Deploy Azure Infra
-    uses: ./.github/workflows/tf-remote-state-ini.yml
+    name: Deploy Azure Infra    
+    uses: ./.github/workflows/tf-remote-state-ini.yml   
     with:
       param_env: development
       param_runner: ubuntu-latest
