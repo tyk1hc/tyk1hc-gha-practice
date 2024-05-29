@@ -145,7 +145,7 @@ jobs:
               container_name       = "${{ inputs.param_storage_container_name }}"
               key                  = "${{ inputs.param_storage_blob_name }}"
               client_id            = "${{ env.ARM_CLIENT_ID }}"
-              client_secret        = "b79ed11f-8aef-4b34-ac27-b556bd71cfee"
+              client_secret        = ""
               subscription_id      = "${{ env.ARM_SUBSCRIPTION_ID }}"
               tenant_id            = "${{ env.ARM_TENANT_ID }}"
             }
