@@ -241,4 +241,4 @@ jobs:
 
       - name: Terraform Detroy
         id: tf-destroy
-        run: terraform detroy -auto-approve
+        run: terraform destroy -auto-approve
