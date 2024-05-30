@@ -235,6 +235,10 @@ jobs:
               body: output
             })
 
-      - name: Terraform Apply
-        id: tf-apply
-        run: terraform apply -auto-approve
+      #- name: Terraform Apply
+      #  id: tf-apply
+      #  run: terraform apply -auto-approve
+
+      - name: Terraform Detroy
+        id: tf-destroy
+        run: terraform detroy -auto-approve
