@@ -235,11 +235,6 @@ jobs:
               body: output
             })
 
-      #- name: Terraform Apply
-      #  id: tf-apply
-      #  run: terraform apply -auto-approve
-
-      - name: Terraform Detroy
-        id: tf-destroy
-        continue-on-error: true
-        run: terraform destroy --target azurerm_resource_group.maintestremove -auto-approve
+      - name: Terraform Apply
+        id: tf-apply
+        run: terraform apply -auto-approve
