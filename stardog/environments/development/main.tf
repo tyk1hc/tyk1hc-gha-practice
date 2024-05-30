@@ -7,6 +7,5 @@ resource "azurerm_resource_group" "maintest" {
 
   lifecycle {
     prevent_destroy = true
-    ignore_changes = [ tags ]
   }
 }
