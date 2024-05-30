@@ -209,6 +209,7 @@ jobs:
       - name: Add Terraform Plan Comment
         id: tf-comment
         uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' # 'push' #
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
@@ -234,6 +235,6 @@ jobs:
               body: output
             })
 
-      #- name: Terraform Apply
-      #  id: tf-apply
-      #  run: terraform apply -auto-approve
+      - name: Terraform Apply
+        id: tf-apply
+        run: terraform apply -auto-approve
