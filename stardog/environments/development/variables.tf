@@ -8,3 +8,12 @@ variable "resource_group_location" {
   type        = string
   description = "RG location in Azure"
 }
+
+variable "resource_environment_tags" {
+  type = map(string)
+  default = {
+    development = "Dev"
+    quality = "QA"
+    production = "Pro"
+  }
+}
