@@ -1,0 +1,20 @@
+# Copyright (c) 2009, 2019 Robert Bosch GmbH and its subsidiaries.
+# This program and the accompanying materials are made available under
+# the terms of the Bosch Internal Open Source License v4
+# which accompanies this distribution, and is available at
+# http://bios.intranet.bosch.com/bioslv4.txt
+
+pool:
+  vmImage: Ubuntu 20.04
+
+name: "1.0.0-$(Date:yyyyMMdd)-$(Build.SourceBranchName)$(Rev:.r)"
+
+variables:
+  - group: "C-IDA22 Shared Subscription Owner Access for Testing"
+  - group: "artifacts-pat"
+
+jobs:
+  - template: test.yaml
+    parameters:
+      tests:
+        - "ExampleTest"

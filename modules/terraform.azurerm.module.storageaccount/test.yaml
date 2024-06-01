@@ -1,0 +1,24 @@
+parameters:
+  tests: []
+
+jobs:
+  - ${{ each test in parameters.tests }}:
+      - job: ${{ test }}
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: '1.2.6'
+          - bash: |
+              echo "$(terraform --version)"
+              cd test
+              ./gradlew clean test --tests terraform.azurerm.module.storageaccount.test.${{ test }}
+            displayName: "Run tests"
+            env:
+              ARM_SUBSCRIPTION_ID: $(AZURE_SUBSCRIPTION_ID)
+              ARM_CLIENT_ID: $(AZURE_CLIENT_ID)
+              ARM_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+              ARM_TENANT_ID: $(AZURE_TENANT_ID)
+              AZURE_ARTIFACTS_ENV_ACCESS_TOKEN: $(PAT)
+
+          - task: PublishTestResults@2
+            condition: always()

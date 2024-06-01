@@ -1,0 +1,20 @@
+/.gradle
+
+# IntelliJ
+.idea
+*.iml
+
+.vscode/*
+.metadata
+
+/build
+/out
+
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+.terraform.*
+
+test/.gradle/
+test/.idea/
+test/build/

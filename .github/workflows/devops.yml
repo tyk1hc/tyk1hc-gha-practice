@@ -20,7 +20,7 @@ env:
   TF_REMOTE_STATE_CONTAINER_NAME: tfstatelearning
   TF_REMOTE_STATE_BLOB_NAME: tflearning.tfstate
 
-  TF_WORKING_DIRECTORY: stardog/environments/development
+  TF_WORKING_DIRECTORY: stardog/environments/development/infrastructure
 
 jobs:
 
@@ -93,8 +93,8 @@ jobs:
 
   deploy-azure-infra-terraform:
     needs: [devops-initial-variables]
-    name: Deploy Azure Infra    
-    uses: ./.github/workflows/tf-remote-state-ini.yml   
+    name: Deploy Azure Infra
+    uses: ./.github/workflows/tf-remote-state-ini.yml
     with:
       param_env: development
       param_runner: ubuntu-latest

@@ -1,1 +1,0 @@
-#Establishes Terraform version compatibility

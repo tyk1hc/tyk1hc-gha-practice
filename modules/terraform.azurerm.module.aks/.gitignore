@@ -1,0 +1,10 @@
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+
+.vscode/*
+.metadata
+
+# IntelliJ
+.idea
+*.iml
