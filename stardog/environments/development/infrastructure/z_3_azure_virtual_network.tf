@@ -10,6 +10,4 @@ module "azure_virtual_network" {
   subnets                    = local.VirtualNetwork_Subnets
 
   tags                       = {Environment = local.Environment}
-
-  depends_on = [ azurerm_log_analytics_workspace.Log_Analytics_Workspace_Default ]
 }
