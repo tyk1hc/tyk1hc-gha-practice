@@ -1,6 +1,6 @@
 module "azure_virtual_network" {
-  source                     = "../../../../../modules/terraform.azurerm.module.virtual-network"
-  resource_group_name        = local.ResourceGroup_VirtualNetwork
+  source                     = "../../../../modules/terraform.azurerm.module.virtual-network"
+  resource_group_name        = local.ResourceGroup_Default_Name
   name                       = local.VirtualNetwork_Name
   location                   = local.Location
   mondiag_enabled            = false
@@ -9,4 +9,6 @@ module "azure_virtual_network" {
   diag_name                  = local.VirtualNetwork_Diag_Name
   subnets                    = local.VirtualNetwork_Subnets
   tags                       = {Environment = local.Environment}
+
+  depends_on = [ azurerm_log_analytics_workspace.Log_Analytics_Workspace_Default, azurerm_resource_group.resource-group-virtual-network ]
 }
