@@ -21,13 +21,13 @@ locals {
     }
 
     # Application Gateway
-    common_subnet = {
+    appGateway_subnet = {
         subnet_name = "appGateway-subnet", subnet_cidr = ["${var.subnet_app_gateway_address_spaces}"], service_endpoint = ["Microsoft.Storage"]
         delegation_name = "", delegation_service = "", delegation_actions = []
     }
 
     # AKS
-    common_subnet = {
+    aks_subnet = {
         subnet_name = "AKS-subnet", subnet_cidr = ["${var.subnet_aks_address_spaces}"], service_endpoint = ["Microsoft.Storage"]
         delegation_name = "", delegation_service = "", delegation_actions = []
     }
