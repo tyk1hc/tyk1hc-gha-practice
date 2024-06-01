@@ -5,7 +5,7 @@ module "azure_virtual_network" {
   location                   = local.Location
   mondiag_enabled            = false
   address_space              = ["${var.vnet_default_address_spaces}"]
-  log_analytics_workspace_id = module.loganalytics_network_aks_ws.id
+  log_analytics_workspace_id = module.Log_Analytics_Workspace_Default.id
   diag_name                  = local.VirtualNetwork_Diag_Name
   subnets                    = local.VirtualNetwork_Subnets
 
