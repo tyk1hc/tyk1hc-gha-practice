@@ -1,5 +1,5 @@
 output "resourcegroup_default_name" {
-  value = azurerm_resource_group.ResourceGroup_Default_Name.name
+  value = azurerm_resource_group.resource-group-virtual-network.name
 }
 
 output "loganalyticworkspace_default_id" {
