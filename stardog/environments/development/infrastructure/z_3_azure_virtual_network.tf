@@ -8,6 +8,7 @@ module "azure_virtual_network" {
   log_analytics_workspace_id = module.loganalytics_network_aks_ws.id
   diag_name                  = local.VirtualNetwork_Diag_Name
   subnets                    = local.VirtualNetwork_Subnets
+
   tags                       = {Environment = local.Environment}
 
   depends_on = [ azurerm_log_analytics_workspace.Log_Analytics_Workspace_Default, azurerm_resource_group.resource-group-virtual-network ]
