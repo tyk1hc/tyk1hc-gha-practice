@@ -11,5 +11,5 @@ module "azure_virtual_network" {
 
   tags                       = {Environment = local.Environment}
 
-  depends_on = [ azurerm_log_analytics_workspace.Log_Analytics_Workspace_Default, azurerm_resource_group.resource-group-virtual-network ]
+  depends_on = [ azurerm_log_analytics_workspace.Log_Analytics_Workspace_Default ]
 }
