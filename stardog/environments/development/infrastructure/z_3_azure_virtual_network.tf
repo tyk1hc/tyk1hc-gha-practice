@@ -1,6 +1,6 @@
 module "azure_virtual_network" {
   source                     = "../../../../modules/terraform.azurerm.module.virtual-network"
-  resource_group_name        = local.ResourceGroup_Default_Name
+  resource_group_name        = azurerm_resource_group.resource-group-virtual-network.name
   name                       = local.VirtualNetwork_Name
   location                   = local.Location
   mondiag_enabled            = false

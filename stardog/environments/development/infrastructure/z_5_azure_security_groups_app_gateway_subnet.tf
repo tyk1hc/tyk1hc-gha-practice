@@ -1,7 +1,7 @@
 resource "azurerm_network_security_group" "nsg-app-gateway-subnet" {
   name                = "${local.Project}-${var.AzureResourceTypes["NetworkSecurityGroup"]}-appGateway-subnet-${local.Environment}-${local.Location}"
   location            = local.Location
-  resource_group_name = local.ResourceGroup_Default_Name
+  resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
 }
 
 resource "azurerm_network_security_rule" "nsg-rule-gatewaymanager" {
@@ -14,7 +14,7 @@ resource "azurerm_network_security_rule" "nsg-rule-gatewaymanager" {
   destination_port_range      = "65200-65535"
   source_address_prefix       = "GatewayManager"
   destination_address_prefix  = "*"
-  resource_group_name         = local.ResourceGroup_Default_Name
+  resource_group_name         = azurerm_resource_group.resource-group-virtual-network.name
   network_security_group_name = azurerm_network_security_group.nsg-app-gateway-subnet.name
 }
 

@@ -1,7 +1,7 @@
 resource "azurerm_network_security_group" "nsg-common-subnet" {
   name                = "${local.Project}-${var.AzureResourceTypes["NetworkSecurityGroup"]}-Common-Subnet-${local.Environment}-${local.Location}"
   location            = local.Location
-  resource_group_name = local.ResourceGroup_Default_Name
+  resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
 }
 
 resource "azurerm_network_security_rule" "nsg-rule-BTIAAcess" {
@@ -14,7 +14,7 @@ resource "azurerm_network_security_rule" "nsg-rule-BTIAAcess" {
   destination_port_range      = "*"
   source_address_prefixes       = ["103.4.127.176","194.39.218.13"]
   destination_address_prefix  = "*"
-  resource_group_name         = local.ResourceGroup_Default_Name
+  resource_group_name         = azurerm_resource_group.resource-group-virtual-network.name
   network_security_group_name = azurerm_network_security_group.nsg-common-subnet.name
 }
 
