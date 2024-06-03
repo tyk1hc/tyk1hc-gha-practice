@@ -18,7 +18,7 @@ resource "azurerm_network_security_rule" "nsg-rule-BTIAAcess" {
   network_security_group_name = azurerm_network_security_group.nsg-common-subnet.name
 }
 
-resource "azurerm_subnet_network_security_group_association" "example" {
+resource "azurerm_subnet_network_security_group_association" "common-subnet-association" {
   subnet_id                 = module.azure_virtual_network.subnets_map[local.Subnet_Common]
   network_security_group_id = azurerm_network_security_group.nsg-common-subnet.id
 }
