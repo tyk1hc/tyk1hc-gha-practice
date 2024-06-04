@@ -39,6 +39,8 @@ locals {
     }
   }
 
+  # Azure Container Registry
+  ContainerRegistry = "${local.Project}-${var.AzureResourceTypes["ResourceGroup"]}-${local.Environment}-${local.Location}"
 
 
 }
