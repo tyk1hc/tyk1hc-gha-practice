@@ -33,6 +33,7 @@ variable "AzureResourceTypes" {
     LogAnalyticWorkSpace = "log"
     NetworkSecurityGroup = "nsg"
     ContainerRegistry = "cr"
+    StorageAccount = "st"
   }
   description = "The Azure Resource Group Type Abbreviation"
 }
