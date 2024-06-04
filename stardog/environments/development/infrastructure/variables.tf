@@ -34,6 +34,7 @@ variable "AzureResourceTypes" {
     NetworkSecurityGroup = "nsg"
     ContainerRegistry = "cr"
     StorageAccount = "st"
+    ApplicationGateway = "agw"
   }
   description = "The Azure Resource Group Type Abbreviation"
 }

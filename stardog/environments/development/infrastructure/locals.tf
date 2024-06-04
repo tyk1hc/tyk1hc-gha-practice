@@ -39,8 +39,16 @@ locals {
     }
   }
 
-  # Azure Container Registry
-  ContainerRegistry = "${local.Project}-${var.AzureResourceTypes["ResourceGroup"]}-${local.Environment}-${local.Location}"
+
+  #Application Gateway
+  backend_address_pool_name      = "${local.Project}-appgw-beap-${local.Environment}"
+  frontend_port_name             = "${local.Project}-appgw-feport-${local.Environment}"
+  frontend_ip_configuration_name = "${local.Project}-appgw-feip-${local.Environment}"
+  http_setting_name              = "${local.Project}-appgw-be-htst-${local.Environment}"
+  listener_name                  = "${local.Project}-appgw-httplstn-${local.Environment}"
+  request_routing_rule_name      = "${local.Project}-appgw-rqrt-${local.Environment}"
+  redirect_configuration_name    = "${local.Project}-appgw-rdrcfg-${local.Environment}"
+
 
 
 }
