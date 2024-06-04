@@ -30,7 +30,7 @@ resource "azurerm_application_gateway" "aks-application-gateway" {
 
     gateway_ip_configuration {
         name      = "my-gateway-ip-configuration"
-        subnet_id = module.azure_virtual_network.subnets_map[local.Subnet_AppGateway].id 
+        subnet_id = module.azure_virtual_network.subnets_map[local.Subnet_AppGateway]
     }
 
     frontend_port {
