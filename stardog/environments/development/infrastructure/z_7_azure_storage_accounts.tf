@@ -1,6 +1,6 @@
 module "diagstore" {
   source                       = "../../../../modules/terraform.azurerm.module.storageaccount"
-  name                         = "${local.Project}${var.AzureResourceTypes["StorageAccount"]}diagstore${local.Environment}${local.Location}"
+  name                         = "${local.Project}${var.AzureResourceTypes["StorageAccount"]}diagstore${local.Environment}"
   resource_group_name          = azurerm_resource_group.resource-group-virtual-network.name
   location                     = local.Location
   tags                         = { Environment = "Dev" }
@@ -16,7 +16,7 @@ module "diagstore" {
 
 module "flow_log_storage" {
   source                       = "../../../../modules/terraform.azurerm.module.storageaccount"
-  name                         = "${local.Project}${var.AzureResourceTypes["StorageAccount"]}flowlogstorage${local.Environment}${local.Location}"
+  name                         = "${local.Project}${var.AzureResourceTypes["StorageAccount"]}flowlogstorage${local.Environment}"
   resource_group_name          = azurerm_resource_group.resource-group-virtual-network.name
   location                     = local.Location
   min_tls_version              = "TLS1_2"
@@ -29,7 +29,7 @@ module "flow_log_storage" {
 
 module "k8spvc" {
   source                       = "../../../../modules/terraform.azurerm.module.storageaccount"
-  name                         = "${local.Project}${var.AzureResourceTypes["StorageAccount"]}k8spvc${local.Environment}${local.Location}"
+  name                         = "${local.Project}${var.AzureResourceTypes["StorageAccount"]}k8spvc${local.Environment}"
   resource_group_name          = azurerm_resource_group.resource-group-virtual-network.name
   location                     = local.Location
   tags                         = { Environment = "Dev" }
