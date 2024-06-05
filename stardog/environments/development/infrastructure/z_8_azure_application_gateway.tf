@@ -9,6 +9,7 @@ resource "azurerm_public_ip" "appgateway-public-ip" {
   resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
   location            = local.Location
   allocation_method   = "Static"
+  sku = "Standard"
 
   tags = {
     environment = "Dev"
