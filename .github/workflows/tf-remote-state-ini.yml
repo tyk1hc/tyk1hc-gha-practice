@@ -112,8 +112,8 @@ jobs:
             echo "------------Storage Account Name: $AZ_CLI_STORAGE_ACCOUNT_NAME ------------------------------------"
 
             # Check and create terraform remote state STORAGE ACCOUNT
-            AZ_CLI_IS_STORAGE_ACCOUNT_EXIST=$(az storage account check-name --name $AZ_CLI_STORAGE_ACCOUNT_NAME --query nameAvailable)
-            if [ $AZ_CLI_IS_STORAGE_ACCOUNT_EXIST = true ]; then
+            AZ_CLI_IS_STORAGE_ACCOUNT_EXIST_1=$(az storage account check-name --name $AZ_CLI_STORAGE_ACCOUNT_NAME --query nameAvailable)
+            if [ $AZ_CLI_IS_STORAGE_ACCOUNT_EXIST_1 = true ]; then
               az storage account create --name $AZ_CLI_STORAGE_ACCOUNT_NAME --resource-group $AZ_CLI_RESOURCE_GROUP_NAME --location $AZ_CLI_STORAGE_ACCOUNT_LOCATION --sku Standard_LRS --encryption-services blob
               echo "step-output-storage-account-result = $AZ_CLI_STORAGE_ACCOUNT_NAME created successfully!"
             else
@@ -123,7 +123,8 @@ jobs:
             echo "-------------Storage Account Container Name: $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME ---------------"
 
             # Check and create terraform remote state STORAGE CONTAINER
-            if [ $AZ_CLI_IS_STORAGE_ACCOUNT_EXIST = false ]; then
+            AZ_CLI_IS_STORAGE_ACCOUNT_EXIST_2=$(az storage account check-name --name $AZ_CLI_STORAGE_ACCOUNT_NAME --query nameAvailable)
+            if [ $AZ_CLI_IS_STORAGE_ACCOUNT_EXIST_2 = false ]; then
               # Get storage account key
               AZ_CLI_ACCOUNT_KEY=$(az storage account keys list --resource-group $AZ_CLI_RESOURCE_GROUP_NAME --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
               AZ_CLI_ACCOUNT_CONTAINER_EXISTS=$(az storage container exists --account-name $AZ_CLI_STORAGE_ACCOUNT_NAME --account-key $AZ_CLI_ACCOUNT_KEY --name $AZ_CLI_STORAGE_ACCOUNT_CONTAINER_NAME --query exists)
