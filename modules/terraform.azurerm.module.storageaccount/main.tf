@@ -80,7 +80,7 @@ resource "azurerm_monitor_diagnostic_setting" "storage_mondiags" {
       category = log.key
       enabled  = log.value
       retention_policy {
-        enabled = true        
+        enabled = true
       }
     }
   }
@@ -91,7 +91,7 @@ resource "azurerm_monitor_diagnostic_setting" "storage_mondiags" {
       category = metric.key
       enabled  = metric.value
       retention_policy {
-        enabled = true        
+        enabled = true
       }
     }
   }
