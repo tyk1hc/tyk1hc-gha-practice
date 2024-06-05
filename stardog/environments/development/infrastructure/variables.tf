@@ -35,6 +35,10 @@ variable "AzureResourceTypes" {
     ContainerRegistry = "cr"
     StorageAccount = "st"
     ApplicationGateway = "agw"
+    AzureKubernetes= "aks"
+    PrivateDomainNameServer = "dns"
+    PrivateLinkDomainNameServer = "pr-dns"
+
   }
   description = "The Azure Resource Group Type Abbreviation"
 }
