@@ -63,6 +63,17 @@ resource "azurerm_application_gateway" "aks-application-gateway" {
         protocol                       = "Http"
     }
 
+     waf_configuration {
+        enabled                  = true
+        firewall_mode            = "Prevention"
+        rule_set_type            = "OWASP"
+        rule_set_version         = 3.1
+        file_upload_limit_mb     = 100
+        max_request_body_size_kb = 128
+        request_body_check       = true
+
+    }
+
     request_routing_rule {
         name                       = local.request_routing_rule_name
         priority                   = 9
