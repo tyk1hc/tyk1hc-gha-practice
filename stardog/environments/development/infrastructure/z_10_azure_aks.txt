@@ -1,11 +1,10 @@
 module "aks" {
   source = "../../../../modules/terraform.azurerm.module.aks"
   name                                = "${local.Project}-${var.AzureResourceTypes["AzureKubernetes"]}-aks-test-${local.Environment}"
-  resource_group_name                 = module.resource_group_stardog.name
-  location                            = module.resource_group_stardog.location
+  resource_group_name                 = azurerm_resource_group.resource-group-virtual-network
+  location                            = local.Location
 
   env                                 = "Dev"
-
 
   #AKS
   node_resource_group                 = "${local.Project}-${var.AzureResourceTypes["ResourceGroup"]}-aks-nodes-${local.Environment}"
@@ -13,274 +12,60 @@ module "aks" {
   private_dns_zone_id                 = module.private_dns_aks_customdns_vnet.id
   private_cluster_public_fqdn_enabled = "false"
   http_application_routing_enabled    = "true"
-  tags                                = local.project_tags
-  kubernetes_version                  = var.k8s_version
-  agent_name                          = "${var.env}hubnode"
+  tags                                = { Environment = "Dev"}
+  kubernetes_version                  = "1.28.9"
+  agent_name                          = "devhubnode"
   vm_size                             = "Standard_D4s_v5"
   availability_zones                  = ["1","2","3"]
   node_count                          = 1
   enable_auto_scaling                 = "true"
   min_count                           = "1"
   max_count                           = "3"
-  node_labels                         = {app = "common-workloads"}
+  node_labels                         = {app = "dev-common-workloads"}
   node_disk_size                      = "128"
   default_node_pool_ultra_ssd_enabled = "true"
-  subnet_id                           = module.vnet.subnets_map["aks-subnet"]
+  subnet_id                           = module.azure_virtual_network.subnets_map[local.Subnet_AKS]
   network_plugin                      = "kubenet"
   load_balancer_sku                   = "standard"
-  aks_dns_service_ip                  = var.aks_dns_service_ip
-  aks_docker_bridge_cidr              = var.aks_docker_bridge_cidr
-  aks_service_cidr                    = var.aks_service_cidr
-  aks_pod_cidr                        = var.aks_pod_cidr
+  aks_dns_service_ip                  = "10.96.1.10"
+  aks_docker_bridge_cidr              = "172.17.0.1/16"
+  aks_service_cidr                    = "10.96.0.0/12"
+  aks_pod_cidr                        = "10.244.0.0/16"
   azure_policy_enabled                = "true"
   aks_mds_enabled                     = "true"
   outbound_type                       = "userDefinedRouting"
-  aks_user_managed_identity_name      = "${local.naming_convention}-user-managed-identity-aks"
-  aks_user_managed_identity_rg        = module.resource_group_stardog.name
-  aks_user_managed_identity_rg_location = module.resource_group_stardog.location
-  aks_resource_group_id               = module.resource_group_stardog.id
-  network_resource_group_id           = module.resource_group_stardog.id
-  private_dns_aks_customdns_vnet      = module.private_dns_aks_customdns_vnet.id
+  aks_user_managed_identity_name      = "${local.Project}-user-managed-identity-aks"
+  aks_user_managed_identity_rg        = azurerm_resource_group.resource-group-virtual-network.name
+  aks_user_managed_identity_rg_location = local.Location
+  aks_resource_group_id               = azurerm_resource_group.resource-group-virtual-network.id
+  network_resource_group_id           = azurerm_resource_group.resource-group-virtual-network.id
+  private_dns_aks_customdns_vnet      = azurerm_container_registry.container-registry-stardog.id
   acr_id                              = module.acr.id
-  rbac_aad_admin_group_object_ids     = ["3dfb1c20-defd-4fd9-a732-eeeaf86e9710", "cb5ec2d5-b6a4-4f02-87d3-a3e05539587b"]
+  rbac_aad_admin_group_object_ids     = ["f46f316b-2756-43a9-81ff-757ab3d95d41"]
   enable_oms_agent                    = true
   azure_keyvault_secrets_provider_enabled = true
-  law_id                              = module.loganalytics_network_aks_ws.id
-  law_name                            = "${local.naming_convention}-log-network-aks"
-  law_rg                              = module.resource_group_stardog.name
+  law_id                              = azurerm_log_analytics_workspace.Log_Analytics_Workspace_Default.id
+  law_name                            = "${local.Project}-log-network-aks"
+  law_rg                              = azurerm_resource_group.resource-group-virtual-network.name
   ingress_application_gateway         =  {
-                                            gateway_id = module.aksappgateway.app_gw_id[0]
+                                            gateway_id = azurerm_application_gateway.aks-application-gateway.id
                                             enabled    = true
                                          }
   command = "az feature register --namespace Microsoft.ContainerService --name AKS-PrometheusAddonPreview"
-  
-  qa_node_pools = {
-    stardogae01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogae01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="ae01"
-      }
-    }
-    stardogbd01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogbd01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="bd01"
-      }    
-    }
-    stardogps01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogps01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="ps01"
-      }
-    }
-    stardogrbs01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogrbs01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="rbs01"
-      }
-    }
-    
-    stardogcsi01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogcsi01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="csi01"
-      }
-      
-    }
 
-    sdshared01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "sdshared01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="sdshared01"
-      }
-    }
-  }
-  prod_node_pools = {
-    stardogae01 = { 
-      node_count ="1",
-      vm_size ="Standard_E16as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogae01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="ae01"
-      }
-    }
-    stardogbd01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogbd01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="bd01"
-      }    
-    }
-    stardogps01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogps01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="ps01"
-      }
-    }
-    stardogrbs01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogrbs01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="rbs01"
-      }
-    }
-    
-    stardogcsi01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "stardogcsi01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="csi01"
-      }
-      
-    }
-    
-    sdshared01 = { 
-      node_count ="1",
-      vm_size ="Standard_E8as_v5",
-      availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
-      node_disk_type = "Managed",
-      cluster_auto_scaling = "true",
-      cluster_auto_scaling_min_count = "1",
-      cluster_auto_scaling_max_count = "3",
-      max_pods = "110",
-      node_labels = { app: "sdshared01" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
-      ultra_ssd_enabled = "true"
-      owner_tag={
-        owner="sdshared01"
-      }
-    }
-  }
   dev_node_pools = {
-    stardog = { 
+    stardog = {
       node_count ="1",
       vm_size ="Standard_E8as_v5",
       availability_zones = ["1","2","3"]
-      node_disk_size ="64", 
+      node_disk_size ="64",
       node_disk_type = "Managed",
       cluster_auto_scaling = "true",
       cluster_auto_scaling_min_count = "1",
       cluster_auto_scaling_max_count = "3",
       max_pods = "110",
       node_labels = { app: "stardog" },
-      subnet_id = module.vnet.subnets_map["aks-subnet"],
+      subnet_id = module.vnet.subnets_map[local.Subnet_AppGateway],
       ultra_ssd_enabled = "true"
       owner_tag={
         owner="shared"
@@ -288,6 +73,6 @@ module "aks" {
     }
   }
 
-depends_on = [module.aks_route_table]
+  depends_on = [module.aks_route_table]
 
 }

@@ -52,18 +52,18 @@ variable "vnet_default_address_spaces" {
 
 variable "subnet_common_address_spaces" {
   type = string
-  default = "10.0.1.0/24"
+  default = "10.19.0.0/16"
   description = "The common address spaces"
 }
 
 variable "subnet_app_gateway_address_spaces" {
   type = string
-  default = "10.0.2.0/24"
+  default = "10.19.1.0/16"
   description = "The application gateway address spaces"
 }
 
 variable "subnet_aks_address_spaces" {
   type = string
-  default = "10.0.192.0/18"
+  default = "10.19.2.0/24"
   description = "The AKS address spaces"
 }
