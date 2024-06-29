@@ -78,18 +78,18 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     }
 
     auto_scaler_profile {
-        balance_similar_node_groups      = var.auto_scaler_profile.balance_similar_node_groups
-        max_graceful_termination_sec     = var.auto_scaler_profile.max_graceful_termination_sec
-        new_pod_scale_up_delay           = var.auto_scaler_profile.new_pod_scale_up_delay
-        scale_down_delay_after_add       = var.auto_scaler_profile.scale_down_delay_after_add
-        scale_down_delay_after_delete    = var.auto_scaler_profile.scale_down_delay_after_delete
-        scale_down_delay_after_failure   = var.auto_scaler_profile.scale_down_delay_after_failure
-        scan_interval                    = var.auto_scaler_profile.scan_interval
-        scale_down_unneeded              = var.auto_scaler_profile.scale_down_unneeded
-        scale_down_unready               = var.auto_scaler_profile.scale_down_unready
-        scale_down_utilization_threshold = var.auto_scaler_profile.scale_down_utilization_threshold
-        skip_nodes_with_local_storage    = var.auto_scaler_profile.skip_nodes_with_local_storage
-        skip_nodes_with_system_pods      = var.auto_scaler_profile.skip_nodes_with_system_pods
+        balance_similar_node_groups      = var.aks_auto_scaler_profile.balance_similar_node_groups
+        max_graceful_termination_sec     = var.aks_auto_scaler_profile.max_graceful_termination_sec
+        new_pod_scale_up_delay           = var.aks_auto_scaler_profile.new_pod_scale_up_delay
+        scale_down_delay_after_add       = var.aks_auto_scaler_profile.scale_down_delay_after_add
+        scale_down_delay_after_delete    = var.aks_auto_scaler_profile.scale_down_delay_after_delete
+        scale_down_delay_after_failure   = var.aks_auto_scaler_profile.scale_down_delay_after_failure
+        scan_interval                    = var.aks_auto_scaler_profile.scan_interval
+        scale_down_unneeded              = var.aks_auto_scaler_profile.scale_down_unneeded
+        scale_down_unready               = var.aks_auto_scaler_profile.scale_down_unready
+        scale_down_utilization_threshold = var.aks_auto_scaler_profile.scale_down_utilization_threshold
+        skip_nodes_with_local_storage    = var.aks_auto_scaler_profile.skip_nodes_with_local_storage
+        skip_nodes_with_system_pods      = var.aks_auto_scaler_profile.skip_nodes_with_system_pods
     }
 
 }
