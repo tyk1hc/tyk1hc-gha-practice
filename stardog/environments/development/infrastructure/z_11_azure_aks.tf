@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     name = "${local.Project}-${var.AzureResourceTypes["AzureKubernetes"]}-aks-test-${local.Environment}"
     location                          = local.Location
-    resource_group_name               = azurerm_resource_group.resource-group-virtual-network
+    resource_group_name               = azurerm_resource_group.resource-group-virtual-network.name
     azure_policy_enabled              = "true"
     http_application_routing_enabled  = "true"
     node_resource_group               = "${local.Project}-${var.AzureResourceTypes["ResourceGroup"]}-aks-nodes-${local.Environment}"
