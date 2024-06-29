@@ -18,6 +18,16 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         type = "SystemAssigned"
     }
 
+    network_profile {
+        network_plugin     = "kubenet"
+        load_balancer_sku  = "standard"
+        dns_service_ip     = "10.96.1.10"
+        #docker_bridge_cidr = "172.17.0.1/16"
+        service_cidr       = "10.96.0.0/12"
+        pod_cidr           = "10.244.0.0/16"
+        outbound_type      = "userDefinedRouting"
+    }
+
     tags = { Environment = "Dev"}
 
     dynamic "maintenance_window" {
@@ -67,24 +77,19 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         #}
     }
 
-    dev_node_pools = {
-        stardog = {
-        node_count ="1",
-        vm_size ="Standard_E8as_v5",
-        availability_zones = ["1","2","3"]
-        node_disk_size ="64",
-        node_disk_type = "Managed",
-        cluster_auto_scaling = "true",
-        cluster_auto_scaling_min_count = "1",
-        cluster_auto_scaling_max_count = "3",
-        max_pods = "110",
-        node_labels = { app: "stardog" },
-        subnet_id = module.vnet.subnets_map[local.Subnet_AppGateway],
-        ultra_ssd_enabled = "true"
-        owner_tag={
-            owner="shared"
-        }
-        }
+    auto_scaler_profile {
+        balance_similar_node_groups      = var.auto_scaler_profile.balance_similar_node_groups
+        max_graceful_termination_sec     = var.auto_scaler_profile.max_graceful_termination_sec
+        new_pod_scale_up_delay           = var.auto_scaler_profile.new_pod_scale_up_delay
+        scale_down_delay_after_add       = var.auto_scaler_profile.scale_down_delay_after_add
+        scale_down_delay_after_delete    = var.auto_scaler_profile.scale_down_delay_after_delete
+        scale_down_delay_after_failure   = var.auto_scaler_profile.scale_down_delay_after_failure
+        scan_interval                    = var.auto_scaler_profile.scan_interval
+        scale_down_unneeded              = var.auto_scaler_profile.scale_down_unneeded
+        scale_down_unready               = var.auto_scaler_profile.scale_down_unready
+        scale_down_utilization_threshold = var.auto_scaler_profile.scale_down_utilization_threshold
+        skip_nodes_with_local_storage    = var.auto_scaler_profile.skip_nodes_with_local_storage
+        skip_nodes_with_system_pods      = var.auto_scaler_profile.skip_nodes_with_system_pods
     }
 
 }
