@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     private_cluster_enabled           = "true"
     private_dns_zone_id               = module.private_dns_aks_customdns_vnet.id
     private_cluster_public_fqdn_enabled = "false"
-   
+
     identity {
         type = "SystemAssigned"
     }
@@ -62,13 +62,15 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         node_labels          = {app = "dev-common-workloads"}
         max_pods             = 110
         os_disk_size_gb      = "128"
-        os_disk_type         = "Managed"
+        os_disk_type         = "Ephemeral"
         ultra_ssd_enabled    = "true"
+        enable_host_encryption  = true
         vnet_subnet_id       = module.azure_virtual_network.subnets_map[local.Subnet_AKS]
         type                 = "VirtualMachineScaleSets"
         zones                = ["1","2","3"]
         orchestrator_version = "1.28.9"
         tags                 = { Environment = "Dev"}
+        only_critical_addons_enabled = true
         #dynamic "upgrade_settings" {
         #    for_each = []
         #    content {
@@ -90,6 +92,17 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         scale_down_utilization_threshold = var.aks_auto_scaler_profile.scale_down_utilization_threshold
         skip_nodes_with_local_storage    = var.aks_auto_scaler_profile.skip_nodes_with_local_storage
         skip_nodes_with_system_pods      = var.aks_auto_scaler_profile.skip_nodes_with_system_pods
+    }
+
+    key_vault_secrets_provider {
+        secret_rotation_enabled = "false"
+    }
+    local_account_disabled = "true"
+
+    azure_active_directory_role_based_access_control {
+        managed                = true
+        azure_rbac_enabled     = true
+        admin_group_object_ids = ["f46f316b-2756-43a9-81ff-757ab3d95d41"]
     }
 
 }
