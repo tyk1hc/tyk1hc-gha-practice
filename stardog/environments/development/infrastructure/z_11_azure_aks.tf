@@ -6,7 +6,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     http_application_routing_enabled  = "true"
     node_resource_group               = "${local.Project}-${var.AzureResourceTypes["ResourceGroup"]}-aks-nodes-${local.Environment}"
     kubernetes_version                = "1.28.9"
-    dns_prefix                        = "aks"
+    dns_prefix                        = "ttkyaks"
     sku_tier                          = "Standard"
     automatic_channel_upgrade         = "patch"
     open_service_mesh_enabled         = "false"
