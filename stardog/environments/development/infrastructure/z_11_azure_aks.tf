@@ -7,13 +7,13 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     node_resource_group               = "${local.Project}-${var.AzureResourceTypes["ResourceGroup"]}-aks-nodes-${local.Environment}"
     kubernetes_version                = "1.28.9"
     dns_prefix                        = "aks"
-    sku_tier                          = "Free"
-    automatic_channel_upgrade         = null
+    sku_tier                          = "Standard"
+    automatic_channel_upgrade         = "patch"
     open_service_mesh_enabled         = "false"
     private_cluster_enabled           = "true"
     private_dns_zone_id               = module.private_dns_aks_customdns_vnet.id
     private_cluster_public_fqdn_enabled = "false"
-
+   
     identity {
         type = "SystemAssigned"
     }
@@ -60,7 +60,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         min_count            = 1
         max_count            = 3
         node_labels          = {app = "dev-common-workloads"}
-        max_pods             = 30
+        max_pods             = 110
         os_disk_size_gb      = "128"
         os_disk_type         = "Managed"
         ultra_ssd_enabled    = "true"
