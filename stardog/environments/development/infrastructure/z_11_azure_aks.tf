@@ -64,13 +64,13 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         os_disk_size_gb      = "128"
         os_disk_type         = "Ephemeral"
         ultra_ssd_enabled    = "true"
-        enable_host_encryption  = true
+        enable_host_encryption  = "true"
         vnet_subnet_id       = module.azure_virtual_network.subnets_map[local.Subnet_AKS]
         type                 = "VirtualMachineScaleSets"
         zones                = ["1","2","3"]
         orchestrator_version = "1.28.9"
         tags                 = { Environment = "Dev"}
-        only_critical_addons_enabled = true
+        only_critical_addons_enabled = "true"
         #dynamic "upgrade_settings" {
         #    for_each = []
         #    content {
@@ -100,9 +100,27 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     local_account_disabled = "true"
 
     azure_active_directory_role_based_access_control {
-        managed                = true
-        azure_rbac_enabled     = true
+        managed                = "true"
+        azure_rbac_enabled     = "true"
         admin_group_object_ids = ["f46f316b-2756-43a9-81ff-757ab3d95d41"]
     }
 
+}
+
+resource "azurerm_user_assigned_identity" "aks_user_managed_identity" {
+  resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
+  location            = local.Location
+  name                = "${local.Project}-user-managed-identity-aks"
+}
+
+resource "azurerm_role_assignment" "aks_managed_identity_role_assignment_aks_rg" {
+  scope                = azurerm_resource_group.resource-group-virtual-network.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.aks_user_managed_identity.principal_id
+}
+
+resource "azurerm_role_assignment" "aks_managed_identity_role_assignment_privatednszone" {
+  scope                = module.private_dns_aks_customdns_vnet.id
+  role_definition_name = "Private DNS Zone Contributor"
+  principal_id         = azurerm_user_assigned_identity.aks_user_managed_identity.principal_id
 }
