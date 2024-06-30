@@ -15,7 +15,8 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     private_cluster_public_fqdn_enabled = "false"
 
     identity {
-        type = "SystemAssigned"
+        type = "UserAssigned"
+        identity_ids = [azurerm_user_assigned_identity.aks_user_managed_identity.id]
     }
 
     network_profile {
@@ -103,6 +104,13 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         managed                = "true"
         azure_rbac_enabled     = "true"
         admin_group_object_ids = ["f46f316b-2756-43a9-81ff-757ab3d95d41"]
+    }
+
+    lifecycle {
+        ignore_changes = [
+            windows_profile,
+            default_node_pool, microsoft_defender
+        ]
     }
 
 }
