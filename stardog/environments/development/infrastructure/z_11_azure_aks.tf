@@ -113,6 +113,11 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
         ]
     }
 
+    depends_on = [
+            azurerm_role_assignment.aks_managed_identity_role_assignment_aks_rg,
+            azurerm_role_assignment.aks_managed_identity_role_assignment_privatednszone
+    ]
+
 }
 
 resource "azurerm_user_assigned_identity" "aks_user_managed_identity" {
