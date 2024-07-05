@@ -158,6 +158,10 @@ jobs:
                 version = ">=3.0.0"
                 source  = "hashicorp/azurerm"
               }
+              helm = {
+                source = "hashicorp/helm"
+                version = ">= 2.1.0"
+              }
             }
           }
           EOF

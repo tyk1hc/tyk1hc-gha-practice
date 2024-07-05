@@ -90,7 +90,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
     scale_down_unready               = var.auto_scaler_profile.scale_down_unready
     scale_down_utilization_threshold = var.auto_scaler_profile.scale_down_utilization_threshold
     skip_nodes_with_local_storage    = var.auto_scaler_profile.skip_nodes_with_local_storage
-    skip_nodes_with_system_pods      = var.auto_scaler_profile.skip_nodes_with_system_pods     
+    skip_nodes_with_system_pods      = var.auto_scaler_profile.skip_nodes_with_system_pods
   }
 
   identity {
@@ -145,7 +145,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
   }
 
   key_vault_secrets_provider {
-    secret_rotation_enabled = var.azure_keyvault_secrets_provider_enabled
+    secret_rotation_enabled = false
   }
 
 #  role_based_access_control_enabled {
@@ -170,7 +170,7 @@ resource "azurerm_kubernetes_cluster" "kubernetes_cluster" {
 }
 
 resource "azurerm_kubernetes_cluster_node_pool" "aks" {
-  
+
   lifecycle {
     ignore_changes = [
       node_count
