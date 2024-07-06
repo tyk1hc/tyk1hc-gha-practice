@@ -127,3 +127,62 @@ resource "helm_release" "external_nginx" {
 
   values = [file("${path.module}/values/ingress.yaml")]
 }
+
+resource "helm_release" "cert_manager" {
+    name = "cert-manager"
+
+    repository = "https://charts.jetstack.io"
+    chart = "cert-manager"
+    namespace = "cert-manager"
+    create_namespace = true 
+    version = "v1.13.1"
+
+    set {
+        name  = "installCRDs"
+        value = "true"
+    }
+}
+
+#Workload Managed Identity
+resource "azurerm_user_assigned_identity" "dev_test" {
+    name = "dev-test"
+    location = azurerm_resource_group.resource-group-virtual-network.location
+    resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
+}
+
+resource "azurerm_federated_identity_credential" "dev_test" {
+  name                = "dev-test"
+  resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = azurerm_kubernetes_cluster.this.oidc_issuer_url
+  parent_id           = azurerm_user_assigned_identity.dev_test.id
+  subject             = "system:serviceaccount:dev:my-account"
+
+  depends_on = [azurerm_kubernetes_cluster.this]
+}
+
+#Storage Account
+resource "random_integer" "this" {
+  min = 10000
+  max = 5000000
+}
+
+resource "azurerm_storage_account" "this" {
+  name                     = "devtest${random_integer.this.result}"
+  resource_group_name      = azurerm_resource_group.resource-group-virtual-network.name
+  location                 = azurerm_resource_group.resource-group-virtual-network.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "this" {
+  name                  = "test"
+  storage_account_name  = azurerm_storage_account.this.name
+  container_access_type = "private"
+}
+
+resource "azurerm_role_assignment" "dev_test" {
+  scope                = azurerm_storage_account.this.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.dev_test.principal_id
+}
