@@ -58,7 +58,8 @@ resource "azurerm_subnet" "subnets" {
     }
   }
   lifecycle {
-    ignore_changes = [ service_endpoints,enforce_private_link_endpoint_network_policies ]
+    #ignore_changes = [ service_endpoints,enforce_private_link_endpoint_network_policies ]
+    ignore_changes = [ service_endpoints ]
   }
 }
 
