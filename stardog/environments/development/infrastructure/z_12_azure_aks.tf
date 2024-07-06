@@ -66,8 +66,6 @@ resource "azurerm_kubernetes_cluster" "this" {
 }
 
 
-
-
 resource "azurerm_kubernetes_cluster_node_pool" "spot" {
     name                  = "spot"
     kubernetes_cluster_id = azurerm_kubernetes_cluster.this.id
@@ -100,4 +98,32 @@ resource "azurerm_kubernetes_cluster_node_pool" "spot" {
     lifecycle {
         ignore_changes = [node_count]
     }
+}
+
+data "azurerm_kubernetes_cluster" "this" {
+    name = "${local.Project}-${var.AzureResourceTypes["AzureKubernetes"]}-aks-test-${local.Environment}"
+    resource_group_name = azurerm_resource_group.resource-group-virtual-network.name
+
+    depends_on = [ azurerm_kubernetes_cluster.this ]
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = data.azurerm_kubernetes_cluster.this.kube_config.0.host
+    client_certificate     = base64decode(data.azurerm_kubernetes_cluster.this.kube_config.0.client_certificate)
+    client_key             = base64decode(data.azurerm_kubernetes_cluster.this.kube_config.0.client_key)
+    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.this.kube_config.0.cluster_ca_certificate)
+  }
+}
+
+resource "helm_release" "external_nginx" {
+  name = "external"
+
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  namespace        = "ingress"
+  create_namespace = true
+  version          = "4.8.0"
+
+  values = [file("${path.module}/values/ingress.yaml")]
 }
